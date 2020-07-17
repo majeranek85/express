@@ -16,6 +16,8 @@ app.use((req, res, next) => {
 
 app.use(express.static(path.join(__dirname, '/public')));
 
+app.use(express.urlencoded({ extended: false }));
+
 app.get('/', (req, res) => {
   res.render('index');
 });
@@ -38,6 +40,20 @@ app.get('/history', (req, res) => {
 
 app.get('/hello/:name', (req, res) => {
   res.render('hello', { name: req.params.name });
+});
+
+app.post('/contact/send-message', (req, res) => {
+
+  const { author, sender, title, image, message } = req.body;
+
+  if(author && sender && title && image && message) {
+    res.render('contact', { isSent: true, image: image });
+    //console.log(image);
+  }
+  else {
+    res.render('contact', { isError: true });
+  }
+
 });
 
 app.use((req, res) => {
